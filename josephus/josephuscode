@@ -1,0 +1,43 @@
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class Josephus{
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+       
+        int numPessoas = 20;
+        
+        System.out.print("Digite o valor de m (o passo de eliminação): ");
+        int m = scanner.nextInt();
+        scanner.close();
+
+        
+        int sobrevivente = resolverJosephus(numPessoas, m);
+
+       
+        System.out.println("A pessoa sobrevivente é a de número: " + sobrevivente);
+    }
+
+    public static int resolverJosephus(int n, int m) {
+        LinkedList<Integer> pessoas = new LinkedList<>();
+
+       
+        for (int i = 1; i <= n; i++) {
+            pessoas.add(i);
+        }
+
+        int index = 0;
+
+      
+        while (pessoas.size() > 1) {
+          
+            index = (index + m - 1) % pessoas.size();
+            pessoas.remove(index);
+        }
+
+       
+        return pessoas.get(0);
+    }
+}
