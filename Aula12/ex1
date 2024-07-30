@@ -1,0 +1,87 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+class Pilha {
+    private Stack<Character> stack;
+
+    public Pilha() {
+        stack = new Stack<>();
+    }
+
+    public void empilhar(char item) {
+        stack.push(item);
+    }
+
+    public char desempilhar() {
+        return stack.pop();
+    }
+
+    public boolean estaVazia() {
+        return stack.isEmpty();
+    }
+
+    public int tamanho() {
+        return stack.size();
+    }
+}
+
+public class Ex1 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Digite uma sequência de caracteres:");
+        String texto = scanner.nextLine();
+
+
+        String textoInvertido = inverterTexto(texto);
+        System.out.println("Texto invertido: " + textoInvertido);
+
+
+        boolean palindromo = verificarPalindromo(texto);
+        if (palindromo) {
+            System.out.println("O texto é um palíndromo.");
+        } else {
+            System.out.println("O texto não é um palíndromo.");
+        }
+
+        scanner.close();
+    }
+
+    public static String inverterTexto(String texto) {
+        Pilha pilha = new Pilha();
+
+
+        for (char c : texto.toCharArray()) {
+            pilha.empilhar(c);
+        }
+
+
+        StringBuilder textoInvertido = new StringBuilder();
+        while (!pilha.estaVazia()) {
+            textoInvertido.append(pilha.desempilhar());
+        }
+
+        return textoInvertido.toString();
+    }
+
+    public static boolean verificarPalindromo(String texto) {
+        Pilha pilha = new Pilha();
+
+
+        String textoLimpo = texto.replaceAll("[ .]", "").toLowerCase();
+
+
+        for (char c : textoLimpo.toCharArray()) {
+            pilha.empilhar(c);
+        }
+
+
+        StringBuilder textoReverso = new StringBuilder();
+        while (!pilha.estaVazia()) {
+            textoReverso.append(pilha.desempilhar());
+        }
+
+        
+        return textoLimpo.equals(textoReverso.toString());
+    }
+}
