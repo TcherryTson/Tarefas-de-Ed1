@@ -1,0 +1,43 @@
+import java.util.Random;
+import java.util.Stack;
+
+class TestaPilha {
+    private Stack<Integer> pilhaN;
+    private Stack<Integer> pilhaP;
+
+    public TestaPilha() {
+        pilhaN = new Stack<>();
+        pilhaP = new Stack<>();
+    }
+
+    public void processarNumeros() {
+        Random random = new Random();
+
+        for (int i = 0; i < 1000; i++) {
+            int numero = random.nextInt(201) - 100;
+
+            if (numero > 0) {
+                pilhaP.push(numero);
+            } else if (numero < 0) {
+                pilhaN.push(numero);
+            } else {
+                if (!pilhaN.isEmpty() && !pilhaP.isEmpty()) {
+                    int numeroN = pilhaN.pop();
+                    int numeroP = pilhaP.pop();
+                    System.out.println("Número removido da pilha N: " + numeroN);
+                    System.out.println("Número removido da pilha P: " + numeroP);
+                } else {
+                    System.out.println("Uma das pilhas está vazia. Nenhum número para remover.");
+                }
+            }
+        }
+
+        System.out.println("Pilha N final: " + pilhaN);
+        System.out.println("Pilha P final: " + pilhaP);
+    }
+
+    public static void main(String[] args) {
+        TestaPilha testaPilha = new TestaPilha();
+        testaPilha.processarNumeros();
+    }
+}
