@@ -1,0 +1,47 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Ex2 {
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<>();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Digite os números para a pilha (digite 'pronto' para finalizar):");
+
+        while (scanner.hasNext()) {
+            String input = scanner.next();
+            if (input.equalsIgnoreCase("pronto")) {
+                break;
+            }
+            try {
+                int number = Integer.parseInt(input);
+                stack.push(number);
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, digite um número válido ou 'pronto' para finalizar.");
+            }
+        }
+
+        System.out.println("Pilha original: " + stack);
+
+        System.out.print("Digite a chave a ser removida: ");
+        int keyToRemove = scanner.nextInt();
+
+        removeItem(stack, keyToRemove);
+
+        System.out.println("Pilha após remover o item com chave " + keyToRemove + ": " + stack);
+    }
+
+    public static void removeItem(Stack<Integer> stack, int key) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        int top = stack.pop();
+
+        removeItem(stack, key);
+
+        if (top != key) {
+            stack.push(top);
+        }
+    }
+}
