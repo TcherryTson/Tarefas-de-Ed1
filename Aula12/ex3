@@ -1,0 +1,106 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+class Aviao {
+    private String nome;
+    private int identificador;
+
+    public Aviao(String nome, int identificador) {
+        this.nome = nome;
+        this.identificador = identificador;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getIdentificador() {
+        return identificador;
+    }
+
+    @Override
+    public String toString() {
+        return "Avião [Nome: " + nome + ", Identificador: " + identificador + "]";
+    }
+}
+
+public class Ex3 {
+    private static Queue<Aviao> filaDecolagem = new LinkedList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\nEscolha uma opção:");
+            System.out.println("a) Listar o número de aviões aguardando na fila de decolagem");
+            System.out.println("b) Autorizar a decolagem do primeiro avião da fila");
+            System.out.println("c) Adicionar um avião à fila de espera");
+            System.out.println("d) Listar todos os aviões na fila de espera");
+            System.out.println("e) Listar as características do primeiro avião da fila");
+            System.out.println("f) Sair");
+
+            String opcao = scanner.next();
+
+            if (opcao.equalsIgnoreCase("a")) {
+                listarNumeroAvioes();
+            } else if (opcao.equalsIgnoreCase("b")) {
+                autorizarDecolagem();
+            } else if (opcao.equalsIgnoreCase("c")) {
+                adicionarAviao();
+            } else if (opcao.equalsIgnoreCase("d")) {
+                listarTodosAvioes();
+            } else if (opcao.equalsIgnoreCase("e")) {
+                listarPrimeiroAviao();
+            } else if (opcao.equalsIgnoreCase("f")) {
+                System.out.println("Encerrando o programa.");
+                break;
+            } else {
+                System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
+    }
+
+    private static void listarNumeroAvioes() {
+        System.out.println("Número de aviões aguardando na fila de decolagem: " + filaDecolagem.size());
+    }
+
+    private static void autorizarDecolagem() {
+        if (filaDecolagem.isEmpty()) {
+            System.out.println("Nenhum avião na fila de decolagem.");
+        } else {
+            Aviao aviao = filaDecolagem.poll();
+            System.out.println("Avião autorizado para decolagem: " + aviao);
+        }
+    }
+
+    private static void adicionarAviao() {
+        System.out.print("Digite o nome do avião: ");
+        scanner.nextLine();
+        String nome = scanner.nextLine();
+        System.out.print("Digite o identificador do avião: ");
+        int identificador = scanner.nextInt();
+        Aviao aviao = new Aviao(nome, identificador);
+        filaDecolagem.add(aviao);
+        System.out.println("Avião adicionado à fila de espera: " + aviao);
+    }
+
+    private static void listarTodosAvioes() {
+        if (filaDecolagem.isEmpty()) {
+            System.out.println("Nenhum avião na fila de espera.");
+        } else {
+            System.out.println("Aviões na fila de espera:");
+            for (Aviao aviao : filaDecolagem) {
+                System.out.println(aviao);
+            }
+        }
+    }
+
+    private static void listarPrimeiroAviao() {
+        if (filaDecolagem.isEmpty()) {
+            System.out.println("Nenhum avião na fila de espera.");
+        } else {
+            Aviao aviao = filaDecolagem.peek();
+            System.out.println("Primeiro avião na fila de espera: " + aviao);
+        }
+    }
+}
