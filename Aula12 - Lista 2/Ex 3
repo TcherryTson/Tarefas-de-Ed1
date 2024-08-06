@@ -1,0 +1,81 @@
+import java.util.Scanner;
+
+class No {
+    int dado;
+    No proximo;
+
+    No(int dado) {
+        this.dado = dado;
+        this.proximo = null;
+    }
+}
+
+class ListaEncadeada {
+    No cabeca;
+
+    void adicionar(int dado) {
+        No novoNo = new No(dado);
+        if (cabeca == null) {
+            cabeca = novoNo;
+        } else {
+            No temp = cabeca;
+            while (temp.proximo != null) {
+                temp = temp.proximo;
+            }
+            temp.proximo = novoNo;
+        }
+    }
+
+    int obterPrimeiro() {
+        if (cabeca != null) {
+            return cabeca.dado;
+        } else {
+            throw new IllegalStateException("A lista está vazia.");
+        }
+    }
+
+    void removerPrimeiro() {
+        if (cabeca != null) {
+            cabeca = cabeca.proximo;
+        } else {
+            throw new IllegalStateException("A lista está vazia.");
+        }
+    }
+}
+
+class Modulo {
+    static int calcularModulo(int x, int y) {
+        if (x == y) {
+            return 0;
+        } else if (x > y) {
+            return calcularModulo(x - y, y);
+        } else {
+            return x;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ListaEncadeada lista = new ListaEncadeada();
+
+        System.out.println("Digite o primeiro número:");
+        int numero1 = scanner.nextInt();
+        lista.adicionar(numero1);
+
+        System.out.println("Digite o segundo número:");
+        int numero2 = scanner.nextInt();
+        lista.adicionar(numero2);
+
+        int x = lista.obterPrimeiro();
+        lista.removerPrimeiro();
+        int y = lista.obterPrimeiro();
+
+        int modulo = Modulo.calcularModulo(x, y);
+
+        System.out.println("O resto da divisão de " + x + " por " + y + " é " + modulo);
+
+        scanner.close();
+    }
+}
