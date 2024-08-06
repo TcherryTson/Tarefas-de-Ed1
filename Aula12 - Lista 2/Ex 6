@@ -1,0 +1,265 @@
+import java.util.Scanner;
+
+class No {
+    int info;
+    No prox;
+
+    public No(int info) {
+        this.info = info;
+        this.prox = null;
+    }
+}
+
+class Lista {
+    No cabeca;
+    int tamanho;
+
+    public Lista() {
+        this.cabeca = null;
+        this.tamanho = 0;
+    }
+
+    public boolean vazia() {
+        return cabeca == null;
+    }
+
+    public void inserir(int valor) {
+        No novoNo = new No(valor);
+        if (vazia() || cabeca.info >= valor) {
+            novoNo.prox = cabeca;
+            cabeca = novoNo;
+        } else {
+            No atual = cabeca;
+            while (atual.prox != null && atual.prox.info < valor) {
+                atual = atual.prox;
+            }
+            novoNo.prox = atual.prox;
+            atual.prox = novoNo;
+        }
+        tamanho++;
+    }
+
+    public void imprimir() {
+        No atual = cabeca;
+        while (atual != null) {
+            System.out.print(atual.info + " ");
+            atual = atual.prox;
+        }
+        System.out.println();
+    }
+}
+
+public class Main {
+
+    public static Lista inverter(Lista lista) {
+        Lista resultado = new Lista();
+        No atual = lista.cabeca;
+        while (atual != null) {
+            No novoNo = new No(atual.info);
+            novoNo.prox = resultado.cabeca;
+            resultado.cabeca = novoNo;
+            resultado.tamanho++;
+            atual = atual.prox;
+        }
+        return resultado;
+    }
+
+    public static Lista retornarImpares(Lista lista1, Lista lista2) {
+        Lista resultado = new Lista();
+        adicionarImpares(lista1, resultado);
+        adicionarImpares(lista2, resultado);
+        return resultado;
+    }
+
+    private static void adicionarImpares(Lista lista, Lista resultado) {
+        No atual = lista.cabeca;
+        while (atual != null) {
+            if (atual.info % 2 != 0) {
+                resultado.inserir(atual.info);
+            }
+            atual = atual.prox;
+        }
+    }
+
+    public static Lista concatena(Lista lista1, Lista lista2) {
+        Lista resultado = new Lista();
+        adicionarLista(resultado, lista1);
+        adicionarLista(resultado, lista2);
+        return resultado;
+    }
+
+    private static void adicionarLista(Lista resultado, Lista lista) {
+        No atual = lista.cabeca;
+        while (atual != null) {
+            resultado.inserir(atual.info);
+            atual = atual.prox;
+        }
+    }
+
+    public static Lista intersecao(Lista lista1, Lista lista2) {
+        Lista resultado = new Lista();
+        No atual1 = lista1.cabeca;
+        while (atual1 != null) {
+            if (contém(lista2, atual1.info) && !contém(resultado, atual1.info)) {
+                resultado.inserir(atual1.info);
+            }
+            atual1 = atual1.prox;
+        }
+        return resultado;
+    }
+
+    private static boolean contém(Lista lista, int valor) {
+        No atual = lista.cabeca;
+        while (atual != null) {
+            if (atual.info == valor) {
+                return true;
+            }
+            atual = atual.prox;
+        }
+        return false;
+    }
+
+    public static Lista intercalar1(Lista lista1, Lista lista2) {
+        Lista resultado = new Lista();
+        No atual1 = lista1.cabeca;
+        No atual2 = lista2.cabeca;
+        while (atual1 != null || atual2 != null) {
+            if (atual1 != null) {
+                resultado.inserir(atual1.info);
+                atual1 = atual1.prox;
+            }
+            if (atual2 != null) {
+                resultado.inserir(atual2.info);
+                atual2 = atual2.prox;
+            }
+        }
+        return resultado;
+    }
+
+    public static Lista intercalar2(Lista lista1, Lista lista2) {
+        Lista resultado = new Lista();
+        No atual1 = lista1.cabeca;
+        No atual2 = lista2.cabeca;
+        while (atual1 != null && atual2 != null) {
+            if (atual1.info <= atual2.info) {
+                resultado.inserir(atual1.info);
+                atual1 = atual1.prox;
+            } else {
+                resultado.inserir(atual2.info);
+                atual2 = atual2.prox;
+            }
+        }
+        while (atual1 != null) {
+            resultado.inserir(atual1.info);
+            atual1 = atual1.prox;
+        }
+        while (atual2 != null) {
+            resultado.inserir(atual2.info);
+            atual2 = atual2.prox;
+        }
+        return resultado;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Lista lista1 = new Lista();
+        Lista lista2 = new Lista();
+        int opcao;
+
+        System.out.println("Preenchendo listas com valores aleatórios...");
+        preencherListaAleatoria(lista1, 10);
+        preencherListaAleatoria(lista2, 10);
+
+        do {
+            System.out.println("\nEscolha uma opção:");
+            System.out.println("1. Inserir valor em Lista 1");
+            System.out.println("2. Inserir valor em Lista 2");
+            System.out.println("3. Imprimir Lista 1");
+            System.out.println("4. Imprimir Lista 2");
+            System.out.println("5. Inverter Lista 1");
+            System.out.println("6. Mostrar ímpares de Lista 1 e Lista 2");
+            System.out.println("7. Concatena Lista 1 e Lista 2");
+            System.out.println("8. Interseção entre Lista 1 e Lista 2");
+            System.out.println("9. Intercalar Lista 1 e Lista 2 (não ordenado)");
+            System.out.println("10. Intercalar Lista 1 e Lista 2 (ordenado)");
+            System.out.println("0. Sair");
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o valor para inserir em Lista 1: ");
+                    int valorInserir1 = scanner.nextInt();
+                    lista1.inserir(valorInserir1);
+                    break;
+
+                case 2:
+                    System.out.print("Digite o valor para inserir em Lista 2: ");
+                    int valorInserir2 = scanner.nextInt();
+                    lista2.inserir(valorInserir2);
+                    break;
+
+                case 3:
+                    System.out.println("Lista 1:");
+                    lista1.imprimir();
+                    break;
+
+                case 4:
+                    System.out.println("Lista 2:");
+                    lista2.imprimir();
+                    break;
+
+                case 5:
+                    Lista listaInvertida = inverter(lista1);
+                    System.out.println("Lista 1 Invertida:");
+                    listaInvertida.imprimir();
+                    break;
+
+                case 6:
+                    Lista listaImpares = retornarImpares(lista1, lista2);
+                    System.out.println("Ímpares das Listas:");
+                    listaImpares.imprimir();
+                    break;
+
+                case 7:
+                    Lista listaConcat = concatena(lista1, lista2);
+                    System.out.println("Listas Concat:");
+                    listaConcat.imprimir();
+                    break;
+
+                case 8:
+                    Lista listaIntersecao = intersecao(lista1, lista2);
+                    System.out.println("Interseção:");
+                    listaIntersecao.imprimir();
+                    break;
+
+                case 9:
+                    Lista listaIntercalar1 = intercalar1(lista1, lista2);
+                    System.out.println("Intercalar 1:");
+                    listaIntercalar1.imprimir();
+                    break;
+
+                case 10:
+                    Lista listaIntercalar2 = intercalar2(lista1, lista2);
+                    System.out.println("Intercalar 2 (Ordenado):");
+                    listaIntercalar2.imprimir();
+                    break;
+
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (opcao != 0);
+
+        scanner.close();
+    }
+
+    private static void preencherListaAleatoria(Lista lista, int quantidade) {
+        for (int i = 0; i < quantidade; i++) {
+            lista.inserir((int) (Math.random() * 201) - 100);
+        }
+    }
+}
