@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+class Nodo {
+    int dado;
+    Nodo proximo;
+
+    public Nodo(int dado) {
+        this.dado = dado;
+        this.proximo = null;
+    }
+}
+
+class ConversorBinario {
+
+    public static Nodo decimalParaBinario(int n) {
+        if (n == 0) {
+            return new Nodo(0);
+        }
+        Nodo cabeca = null;
+        while (n > 0) {
+            Nodo novoNodo = new Nodo(n % 2);
+            if (cabeca == null) {
+                cabeca = novoNodo;
+            } else {
+                Nodo temp = cabeca;
+                while (temp.proximo != null) {
+                    temp = temp.proximo;
+                }
+                temp.proximo = novoNodo;
+            }
+            n = n / 2;
+        }
+        return inverterLista(cabeca); // Corrige a ordem dos bits
+    }
+
+    private static Nodo inverterLista(Nodo cabeca) {
+        Nodo anterior = null;
+        Nodo atual = cabeca;
+        Nodo proximo = null;
+        while (atual != null) {
+            proximo = atual.proximo;
+            atual.proximo = anterior;
+            anterior = atual;
+            atual = proximo;
+        }
+        return anterior;
+    }
+
+    public static void imprimirListaBinaria(Nodo cabeca) {
+        Nodo temp = cabeca;
+        while (temp != null) {
+            System.out.print(temp.dado);
+            temp = temp.proximo;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite um número decimal: ");
+        int numeroDecimal = scanner.nextInt();
+
+        Nodo listaBinaria = decimalParaBinario(numeroDecimal);
+        System.out.print("Representação binária: ");
+        imprimirListaBinaria(listaBinaria);
+    }
+}
