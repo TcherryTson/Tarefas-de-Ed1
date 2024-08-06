@@ -1,0 +1,67 @@
+import java.util.Scanner;
+
+class No {
+    int dado;
+    No proximo;
+
+    No(int dado) {
+        this.dado = dado;
+        this.proximo = null;
+    }
+}
+
+class ListaEncadeada {
+    No cabeca;
+
+    void adicionar(int dado) {
+        No novoNo = new No(dado);
+        if (cabeca == null) {
+            cabeca = novoNo;
+        } else {
+            No temp = cabeca;
+            while (temp.proximo != null) {
+                temp = temp.proximo;
+            }
+            temp.proximo = novoNo;
+        }
+    }
+
+    int contarOcorrencias(int k) {
+        return contarOcorrenciasRecursivamente(cabeca, k);
+    }
+
+    private int contarOcorrenciasRecursivamente(No no, int k) {
+        if (no == null) {
+            return 0;
+        }
+
+        int contagem = (no.dado == k) ? 1 : 0;
+
+        return contagem + contarOcorrenciasRecursivamente(no.proximo, k);
+    }
+}
+
+public class Node {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ListaEncadeada lista = new ListaEncadeada();
+
+        System.out.println("Digite a quantidade de elementos na lista:");
+        int n = scanner.nextInt();
+
+        System.out.println("Digite os elementos da lista:");
+        for (int i = 0; i < n; i++) {
+            int digito = scanner.nextInt();
+            lista.adicionar(digito);
+        }
+
+        System.out.println("Digite o valor para contar as ocorrências:");
+        int k = scanner.nextInt();
+
+        int contagem = lista.contarOcorrencias(k);
+
+        System.out.println("O dígito " + k + " ocorre " + contagem + " vezes na lista.");
+
+        scanner.close();
+    }
+}
