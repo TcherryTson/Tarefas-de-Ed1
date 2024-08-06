@@ -1,0 +1,89 @@
+import java.util.Scanner;
+
+class Nodo {
+    int dado;
+    Nodo proximo;
+
+    Nodo(int dado) {
+        this.dado = dado;
+        this.proximo = null;
+    }
+}
+
+class ListaEncadeada {
+    Nodo cabeca;
+
+    void adicionar(int dado) {
+        Nodo novoNodo = new Nodo(dado);
+        if (cabeca == null) {
+            cabeca = novoNodo;
+        } else {
+            Nodo temp = cabeca;
+            while (temp.proximo != null) {
+                temp = temp.proximo;
+            }
+            temp.proximo = novoNodo;
+        }
+    }
+
+    int obterPrimeiro() {
+        if (cabeca != null) {
+            return cabeca.dado;
+        } else {
+            throw new IllegalStateException("A lista está vazia.");
+        }
+    }
+
+    int obterProximo() {
+        if (cabeca != null && cabeca.proximo != null) {
+            return cabeca.proximo.dado;
+        } else {
+            throw new IllegalStateException("Não há um próximo valor.");
+        }
+    }
+
+    void removerPrimeiro() {
+        if (cabeca != null) {
+            cabeca = cabeca.proximo;
+        } else {
+            throw new IllegalStateException("A lista está vazia.");
+        }
+    }
+
+    boolean temMaisDeUm() {
+        return cabeca != null && cabeca.proximo != null;
+    }
+}
+
+class MDC {
+    static int calcularMDC(int x, int y) {
+        if (x == y) {
+            return x;
+        } else if (x > y) {
+            return calcularMDC(x - y, y);
+        } else {
+            return calcularMDC(y, x);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ListaEncadeada lista = new ListaEncadeada();
+
+        System.out.print("Digite o primeiro número: ");
+        lista.adicionar(scanner.nextInt());
+
+        System.out.print("Digite o segundo número: ");
+        lista.adicionar(scanner.nextInt());
+
+        int x = lista.obterPrimeiro();
+        lista.removerPrimeiro();
+        int y = lista.obterPrimeiro();
+
+        int mdc = MDC.calcularMDC(x, y);
+
+        System.out.println("O MDC de " + x + " e " + y + " é " + mdc);
+    }
+}
