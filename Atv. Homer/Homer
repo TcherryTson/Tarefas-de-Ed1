@@ -1,0 +1,259 @@
+import java.util.Scanner;
+
+ class No {
+    String valor;
+    No anterior;
+    No proximo;
+
+    public No(String valor) {
+        this.valor = valor;
+        this.anterior = null;
+        this.proximo = null;
+    }
+}
+
+ class ListaDuplamenteEncadeada {
+    No inicio;
+    No fim;
+
+    public ListaDuplamenteEncadeada() {
+        this.inicio = null;
+        this.fim = null;
+    }
+
+    public void inserir(String valor) {
+        No novoNo = new No(valor);
+        if (inicio == null) {
+            inicio = novoNo;
+            fim = novoNo;
+        } else {
+            fim.proximo = novoNo;
+            novoNo.anterior = fim;
+            fim = novoNo;
+        }
+    }
+
+    public void inserirNoInicio(String valor) {
+        No novoNo = new No(valor);
+        if (inicio == null) {
+            inicio = novoNo;
+            fim = novoNo;
+        } else {
+            novoNo.proximo = inicio;
+            inicio.anterior = novoNo;
+            inicio = novoNo;
+        }
+    }
+
+    public void inserirNaPosicao(String valor, int posicao) {
+        if (posicao == 0) {
+            inserirNoInicio(valor);
+            return;
+        }
+
+        No novoNo = new No(valor);
+        No atual = inicio;
+        int index = 0;
+
+        while (atual != null && index < posicao) {
+            atual = atual.proximo;
+            index++;
+        }
+
+        if (atual == null) {
+            inserir(valor);
+        } else {
+            novoNo.anterior = atual.anterior;
+            novoNo.proximo = atual;
+            if (atual.anterior != null) {
+                atual.anterior.proximo = novoNo;
+            }
+            atual.anterior = novoNo;
+
+            if (novoNo.anterior == null) {
+                inicio = novoNo;
+            }
+        }
+    }
+
+    public void exibir() {
+        No atual = inicio;
+        while (atual != null) {
+            System.out.print(atual.valor + " ");
+            atual = atual.proximo;
+        }
+        System.out.println();
+    }
+
+    public void remover(String valor) {
+        No atual = inicio;
+        while (atual != null) {
+            if (atual.valor.equals(valor)) {
+                if (atual.anterior != null) {
+                    atual.anterior.proximo = atual.proximo;
+                } else {
+                    inicio = atual.proximo;
+                }
+                if (atual.proximo != null) {
+                    atual.proximo.anterior = atual.anterior;
+                } else {
+                    fim = atual.anterior;
+                }
+                return;
+            }
+            atual = atual.proximo;
+        }
+    }
+
+    public void removerDoFim() {
+        if (fim != null) {
+            if (fim.anterior != null) {
+                fim = fim.anterior;
+                fim.proximo = null;
+            } else {
+                inicio = null;
+                fim = null;
+            }
+        }
+    }
+
+    public void removerDoInicio() {
+        if (inicio != null) {
+            if (inicio.proximo != null) {
+                inicio = inicio.proximo;
+                inicio.anterior = null;
+            } else {
+                inicio = null;
+                fim = null;
+            }
+        }
+    }
+
+    public void removerNaPosicao(int posicao) {
+        if (posicao == 0) {
+            removerDoInicio();
+            return;
+        }
+
+        No atual = inicio;
+        int index = 0;
+
+        while (atual != null && index < posicao) {
+            atual = atual.proximo;
+            index++;
+        }
+
+        if (atual != null) {
+            if (atual.anterior != null) {
+                atual.anterior.proximo = atual.proximo;
+            }
+            if (atual.proximo != null) {
+                atual.proximo.anterior = atual.anterior;
+            }
+        }
+    }
+
+    public boolean contem(String valor) {
+        No atual = inicio;
+        while (atual != null) {
+            if (atual.valor.equals(valor)) {
+                return true;
+            }
+            atual = atual.proximo;
+        }
+        return false;
+    }
+
+    public int tamanho() {
+        int tamanho = 0;
+        No atual = inicio;
+        while (atual != null) {
+            tamanho++;
+            atual = atual.proximo;
+        }
+        return tamanho;
+    }
+
+    public void esvaziar() {
+        inicio = null;
+        fim = null;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ListaDuplamenteEncadeada lista = new ListaDuplamenteEncadeada();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Escolha uma operação:");
+            System.out.println("1. Adicionar elemento no final");
+            System.out.println("2. Adicionar elemento no início");
+            System.out.println("3. Adicionar elemento em uma posição específica");
+            System.out.println("4. Remover elemento");
+            System.out.println("5. Remover elemento do fim");
+            System.out.println("6. Remover elemento do início");
+            System.out.println("7. Remover elemento de uma posição específica");
+            System.out.println("8. Verificar se um elemento está na lista");
+            System.out.println("9. Mostrar tamanho da lista");
+            System.out.println("10. Esvaziar a lista");
+            System.out.println("11. Exibir lista");
+            System.out.println("0. Sair");
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpar o buffer
+
+            if (opcao == 1) {
+                System.out.print("Digite o elemento a ser adicionado: ");
+                String elemento = scanner.nextLine();
+                lista.inserir(elemento);
+            } else if (opcao == 2) {
+                System.out.print("Digite o elemento a ser adicionado: ");
+                String elemento = scanner.nextLine();
+                lista.inserirNoInicio(elemento);
+            } else if (opcao == 3) {
+                System.out.print("Digite o elemento a ser adicionado: ");
+                String elemento = scanner.nextLine();
+                System.out.print("Digite a posição: ");
+                int posicao = scanner.nextInt();
+                scanner.nextLine(); // Limpar o buffer
+                lista.inserirNaPosicao(elemento, posicao);
+            } else if (opcao == 4) {
+                System.out.print("Digite o elemento a ser removido: ");
+                String elemento = scanner.nextLine();
+                lista.remover(elemento);
+            } else if (opcao == 5) {
+                lista.removerDoFim();
+            } else if (opcao == 6) {
+                lista.removerDoInicio();
+            } else if (opcao == 7) {
+                System.out.print("Digite a posição do elemento a ser removido: ");
+                int posicao = scanner.nextInt();
+                scanner.nextLine(); // Limpar o buffer
+                lista.removerNaPosicao(posicao);
+            } else if (opcao == 8) {
+                System.out.print("Digite o elemento a ser verificado: ");
+                String elemento = scanner.nextLine();
+                if (lista.contem(elemento)) {
+                    System.out.println("O elemento " + elemento + " está na lista.");
+                } else {
+                    System.out.println("O elemento " + elemento + " não está na lista.");
+                }
+            } else if (opcao == 9) {
+                System.out.println("Tamanho da lista: " + lista.tamanho());
+            } else if (opcao == 10) {
+                lista.esvaziar();
+                System.out.println("Lista esvaziada.");
+            } else if (opcao == 11) {
+                System.out.println("Conteúdo da lista:");
+                lista.exibir();
+            } else if (opcao == 0) {
+                System.out.println("Saindo...");
+                break;
+            } else {
+                System.out.println("Opção inválida.");
+            }
+        }
+
+        scanner.close();
+    }
+}
