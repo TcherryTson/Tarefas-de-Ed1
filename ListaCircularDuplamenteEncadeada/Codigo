@@ -1,0 +1,119 @@
+import java.util.Scanner;
+
+class No {
+    int dado;
+    No anterior, proximo;
+
+    No(int dado) {
+        this.dado = dado;
+        this.anterior = this.proximo = null;
+    }
+}
+
+class ListaCircularDuplamenteEncadeada {
+    No sentinela;
+
+    ListaCircularDuplamenteEncadeada() {
+        sentinela = new No(Integer.MIN_VALUE);
+        sentinela.proximo = sentinela;
+        sentinela.anterior = sentinela;
+    }
+
+    void inserirEmOrdem(int dado) {
+        No novoNo = new No(dado);
+        No atual = sentinela.proximo;
+
+        while (atual != sentinela && atual.dado < dado) {
+            atual = atual.proximo;
+        }
+
+        novoNo.anterior = atual.anterior;
+        novoNo.proximo = atual;
+        atual.anterior.proximo = novoNo;
+        atual.anterior = novoNo;
+    }
+
+    void removerNo(No no) {
+        no.anterior.proximo = no.proximo;
+        no.proximo.anterior = no.anterior;
+    }
+
+    void removerPrimos() {
+        No atual = sentinela.proximo;
+        while (atual != sentinela) {
+            if (ehPrimo(atual.dado)) {
+                No proximo = atual.proximo;
+                removerNo(atual);
+                atual = proximo;
+            } else {
+                atual = atual.proximo;
+            }
+        }
+    }
+
+    boolean ehPrimo(int numero) {
+        if (numero <= 1) return false;
+        if (numero == 2) return true;
+        if (numero % 2 == 0) return false;
+        for (int i = 3; i <= Math.sqrt(numero); i += 2) {
+            if (numero % i == 0) return false;
+        }
+        return true;
+    }
+
+    void imprimirCrescente() {
+        No atual = sentinela.proximo;
+        while (atual != sentinela) {
+            System.out.print(atual.dado + " ");
+            atual = atual.proximo;
+        }
+        System.out.println();
+    }
+
+    void imprimirDecrescente() {
+        No atual = sentinela.anterior;
+        while (atual != sentinela) {
+            System.out.print(atual.dado + " ");
+            atual = atual.anterior;
+        }
+        System.out.println();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ListaCircularDuplamenteEncadeada lista = new ListaCircularDuplamenteEncadeada();
+
+        System.out.print("Quantos números você deseja inserir? ");
+        int quantidade = scanner.nextInt();
+        int[] vetor = new int[quantidade];
+
+        System.out.println("Digite " + quantidade + " números inteiros entre -9999 e 9999:");
+        for (int i = 0; i < quantidade; i++) {
+            vetor[i] = scanner.nextInt();
+            lista.inserirEmOrdem(vetor[i]);
+        }
+
+        System.out.println("\nNúmeros na ordem de inserção:");
+        for (int i = 0; i < quantidade; i++) {
+            System.out.print(vetor[i] + " ");
+        }
+
+        System.out.println("\n\nLista em ordem crescente:");
+        lista.imprimirCrescente();
+
+        System.out.println("\nLista em ordem decrescente:");
+        lista.imprimirDecrescente();
+
+        lista.removerPrimos();
+
+        System.out.println("\nLista após remoção dos números primos (ordem crescente):");
+        lista.imprimirCrescente();
+
+        System.out.println("\nLista após remoção dos números primos (ordem decrescente):");
+        lista.imprimirDecrescente();
+
+        scanner.close();
+    }
+}
