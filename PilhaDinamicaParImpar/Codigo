@@ -1,0 +1,53 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+ class PilhaParImpar {
+    public static void main(String[] args) {
+        Stack<Integer> pilhaPar = new Stack<>();
+        Stack<Integer> pilhaImpar = new Stack<>();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Digite números inteiros entre -127 e 128 (0 para finalizar):");
+
+        while (true) {
+            int numero = scanner.nextInt();
+            if (numero == 0) {
+                break;
+            }
+            if (numero % 2 == 0) {
+                pilhaPar.push(numero);
+            } else {
+                pilhaImpar.push(numero);
+            }
+        }
+
+        System.out.println("PILHA ÍMPAR: " + pilhaImpar);
+        System.out.println("PILHA PAR: " + pilhaPar);
+
+        System.out.println("Removendo elementos alternadamente das pilhas...");
+        while (!pilhaPar.isEmpty() && !pilhaImpar.isEmpty()) {
+            if (!pilhaImpar.isEmpty()) {
+                System.out.println("Removido da PILHA ÍMPAR: " + pilhaImpar.pop());
+            }
+            if (!pilhaPar.isEmpty()) {
+                System.out.println("Removido da PILHA PAR: " + pilhaPar.pop());
+            }
+        }
+
+        if (!pilhaPar.isEmpty()) {
+            System.out.println("A PILHA PAR ainda possui " + pilhaPar.size() + " elementos:");
+            while (!pilhaPar.isEmpty()) {
+                System.out.println(pilhaPar.pop());
+            }
+        } else if (!pilhaImpar.isEmpty()) {
+            System.out.println("A PILHA ÍMPAR ainda possui " + pilhaImpar.size() + " elementos:");
+            while (!pilhaImpar.isEmpty()) {
+                System.out.println(pilhaImpar.pop());
+            }
+        } else {
+            System.out.println("Ambas as pilhas estão vazias.");
+        }
+
+        scanner.close();
+    }
+}
