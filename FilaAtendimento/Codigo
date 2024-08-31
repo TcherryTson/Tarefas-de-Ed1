@@ -1,0 +1,113 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Random;
+
+class Pessoa {
+    int id;
+    String sexo;
+    int idade;
+    boolean gestante;
+    boolean lactante;
+    boolean necessidadeEspecial;
+    int prioridade;
+
+    Pessoa(int id, String sexo, int idade, boolean gestante, boolean lactante, boolean necessidadeEspecial) {
+        this.id = id;
+        this.sexo = sexo;
+        this.idade = idade;
+        this.gestante = gestante;
+        this.lactante = lactante;
+        this.necessidadeEspecial = necessidadeEspecial;
+        this.prioridade = definirPrioridade();
+    }
+
+    private int definirPrioridade() {
+        if (gestante || lactante) return 3;
+        if (necessidadeEspecial) return 2;
+        if (idade >= 60) return 1;
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Sexo: " + sexo + ", Idade: " + idade + ", Gestante: " + gestante +
+                ", Lactante: " + lactante + ", Necessidade Especial: " + necessidadeEspecial + ", Prioridade: " + prioridade;
+    }
+}
+
+class PostoDeSaude {
+    Deque<Pessoa> deque = new ArrayDeque<>();
+
+    void adicionarPessoa(Pessoa p) {
+        deque.addLast(p);
+    }
+
+    void atenderPessoas(int numAtendimentos) {
+        LinkedList<Pessoa> filaPrioridade3 = new LinkedList<>();
+        LinkedList<Pessoa> filaPrioridade2 = new LinkedList<>();
+        LinkedList<Pessoa> filaPrioridade1 = new LinkedList<>();
+        LinkedList<Pessoa> filaPrioridade0 = new LinkedList<>();
+
+        while (!deque.isEmpty()) {
+            Pessoa p = deque.pollFirst();
+            switch (p.prioridade) {
+                case 3 -> filaPrioridade3.addLast(p);
+                case 2 -> filaPrioridade2.addLast(p);
+                case 1 -> filaPrioridade1.addLast(p);
+                default -> filaPrioridade0.addLast(p);
+            }
+        }
+
+        System.out.println("Atendimentos do dia:");
+        while (numAtendimentos > 0) {
+            if (!filaPrioridade3.isEmpty() && numAtendimentos > 0) {
+                System.out.println(filaPrioridade3.pollFirst());
+                numAtendimentos--;
+            }
+            if (!filaPrioridade2.isEmpty() && numAtendimentos > 0) {
+                System.out.println(filaPrioridade2.pollFirst());
+                numAtendimentos--;
+            }
+            if (!filaPrioridade1.isEmpty() && numAtendimentos > 0) {
+                System.out.println(filaPrioridade1.pollFirst());
+                numAtendimentos--;
+            }
+            if (!filaPrioridade0.isEmpty() && numAtendimentos > 0) {
+                System.out.println(filaPrioridade0.pollFirst());
+                numAtendimentos--;
+            }
+        }
+
+        System.out.println("Pessoas que não foram atendidas:");
+        filaPrioridade3.forEach(System.out::println);
+        filaPrioridade2.forEach(System.out::println);
+        filaPrioridade1.forEach(System.out::println);
+        filaPrioridade0.forEach(System.out::println);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        PostoDeSaude posto = new PostoDeSaude();
+        Random random = new Random();
+        String[] sexos = {"Masculino", "Feminino"};
+
+        for (int i = 1; i <= 100; i++) {
+            String sexo = sexos[random.nextInt(sexos.length)];
+            int idade = random.nextInt(100);
+            boolean gestante = sexo.equals("Feminino") && random.nextBoolean();
+            boolean lactante = sexo.equals("Feminino") && random.nextBoolean();
+            boolean necessidadeEspecial = random.nextInt(10) < 1; // 10% chance de ter necessidades especiais
+            Pessoa p = new Pessoa(i, sexo, idade, gestante, lactante, necessidadeEspecial);
+            posto.adicionarPessoa(p);
+        }
+
+        for (int grupo = 1, atendidos = 0; atendidos < 100; grupo++) {
+            int numAtendimentos = Math.min(grupo, 100 - atendidos);
+            System.out.println("\nGrupo " + grupo + " - Pessoas a serem atendidas: " + numAtendimentos);
+            posto.atenderPessoas(numAtendimentos);
+            atendidos += numAtendimentos;
+        }
+    }
+}
